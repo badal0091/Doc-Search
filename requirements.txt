@@ -1,0 +1,6 @@
+chromadb
+langchain  # 0.1 -- though 0.2 is out, we're yet to migrate on gramener.com
+langchain-community
+langchain-core
+langchain-openai
+openai  # 1.11

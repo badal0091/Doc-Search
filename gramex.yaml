@@ -1,0 +1,81 @@
+url:
+  /api/create-card:
+    handler: docsearch.create_card_handler.CreateCardHandler
+    methods: [POST]
+
+  docsearch/app:
+    pattern: /$YAMLURL/([A-Za-z0-9\-]+)/
+    handler: FileHandler
+    kwargs:
+      path: $YAMLPATH/templates/app.tmpl.html
+      template: true
+      headers:
+        Cache-Control: private, max-age=10
+
+  docsearch/similarity:
+    pattern: /$YAMLURL/similarity
+    handler: FunctionHandler
+    kwargs:
+      function: docsearch.similarity
+      headers:
+        Content-Type: application/json
+
+  docsearch/summarize:
+    pattern: /$YAMLURL/summarize
+    handler: docsearch.Summarizer
+    kwargs:
+      headers:
+        Content-Type: text/event-stream
+
+  docsearch/login:
+    pattern: /$YAMLURL/login
+    handler: EmailAuth
+    kwargs:
+      service: docsearch/email
+      from: "Gramener DocSearch <gramex.guide@gmail.com>"
+      subject: "OTP for Gramener DocSearch"
+      body: |
+        The OTP for {user} is {password}
+
+        Visit {link}
+      html: |
+        <p>The OTP for {user} is {password}.</p>
+        <p><a href="{link}">Click here to log in</a></p>
+      template: $YAMLURL/emailauth.template.html
+      redirect:
+        query: next
+        header: Referer
+        url: /$YAMLURL/
+
+  docsearch/login-ms:
+    pattern: /$YAMLURL/login-ms
+    handler: OAuth2
+    kwargs:
+      client_id: $DOCSEARCH_AZURE_CLIENT_ID
+      client_secret: $DOCSEARCH_AZURE_CLIENT_SECRET
+      authorize:
+        url: https://login.microsoftonline.com/common/oauth2/v2.0/authorize
+        scope:
+          - https://graph.microsoft.com/User.Read
+        extra_params:
+          prompt: select_account
+      access_token:
+        url: https://login.microsoftonline.com/common/oauth2/v2.0/token
+        body:
+          grant_type: "authorization_code"
+      user_info:
+        url: "https://graph.microsoft.com/v1.0/me"
+        headers:
+          Authorization: "Bearer {access_token}"
+      action:
+        function: >
+          handler.session[handler.session_user_key].update({'email': handler.current_user['userPrincipalName']})
+      redirect:
+        query: next
+        url: /$YAMLURL/
+
+email:
+  docsearch/email:
+    type: gmail
+    email: gramex.guide@gmail.com
+    password: tlpmupxnhucitpte

@@ -1,0 +1,31 @@
+.secret*
+
+# Ignore temporary files used for scraping and fetching data
+.scraped.json
+.urls.txt
+*.csv
+*.zip
+*.parquet
+*.pdf
+*.doc*
+
+authorcontracts/contracts/**
+videosearch/*.mp4
+videosearch/frames.json
+videosearch/*-timestamps.txt
+hipreplacement/*.webm
+hipreplacement/*.mp4
+hipreplacement/*.mkv
+hipreplacement/*.mp3
+hipreplacement/*.json
+hipreplacement/*.txt
+
+# Ignore local scraper and embeddings caches
+.cache/
+.embeddings/
+
+# Ignore generated files
+node_modules/
+.vscode/
+.ruff_cache/
+__pycache__/

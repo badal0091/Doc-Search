@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% import json %}
+{% import gramex.cache %}
+{% import docsearch %}
+{% set config = gramex.cache.open('../config.yaml', rel=True) %}
+{% set user = handler.current_user or {} %}
+{% set domain = (user.get('email', '') or '').lower().split('@')[-1] %}
+{% set demo = config['demos'].get(handler.path_args[0]) %}
+{% set authorized = ('domains' not in demo or domain in demo['domains']) if demo else False %}
+{% set title = 'Not found' if demo is None else 'Not authorized' if not authorized else demo['title'] %}
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <link href="../node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="../style.css" rel="stylesheet" />
+  <script type="importmap">
+    {
+      "imports": {
+        "lit-html": "../node_modules/lit-html/lit-html.js",
+        "lit-html/directives/when.js": "../node_modules/lit-html/directives/when.js",
+        "lit-html/directives/unsafe-html.js": "../node_modules/lit-html/directives/unsafe-html.js",
+        "marked": "../node_modules/marked/lib/marked.esm.js",
+        "sse.js": "../node_modules/sse.js/lib/sse.js",
+        "@gramex/ui/format": "../node_modules/@gramex/ui/dist/format.js",
+        "@gramex/network": "../node_modules/@gramex/network/dist/network.js"
+      }
+    }
+  </script>
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" type="module"></script>
+  <script src="../node_modules/d3/dist/d3.min.js"></script>
+  <script src="../node_modules/@gramex/ui/dist/dark-theme.js" type="module"></script>
+  {% if demo and 'domains' in demo %}
+  <script src="https://gramener.com/ipcheck/validate.js"></script>
+  {% end %}
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="..">DocSearch <i class="bi bi-chevron-right"></i></a>
+      <a class="navbar-brand" href=".">{{ title }}</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <input type="range" class="form-range d-none me-3" value="{{ demo.get('similarity', 0.80) if demo else 0.80 }}" min="0.75" max="0.95" step="0.001" id="min-similarity" data-bs-toggle="tooltip" title="Minimum similarity to match: 83.0%" data-bs-placement="bottom" />
+        <div class="nav-item dropdown ms-auto" role="group" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+          <button class="dark-theme-toggle btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle theme (auto)">
+            <i class="bi bi-circle-half"></i> <span class="d-lg-none ms-2">Toggle theme</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" data-bs-theme-value="light"><i class="me-2 bi bi-sun-fill"></i> Light</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="dark"><i class="me-2 bi bi-moon-stars-fill"></i> Dark</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="auto"><i class="me-2 bi bi-circle-half"></i> Auto</button></li>
+          </ul>
+        </div>
+        <a href="../login?next={{ handler.xrequest_uri }}" title="{{ (handler.current_user or {}).get('email', 'Log in') }}" class="btn btn-outline-light ms-2">
+          <i class="bi bi-person-circle"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="display-1 my-5 text-center">{{ title }}</h1>
+
+    {% if not demo %}
+    <div class="alert alert-danger text-center h4 fw-normal">You may be at the wrong place.</div>
+    <p class="text-center my-5">
+      <a class="btn btn-primary btn-lg" href="../">Go to DocSearch home</a>
+    </p>
+    {% elif not authorized %}
+    <div class="alert alert-danger text-center h4 fw-normal"><code>{{ user.get('email', 'Anonymous user') }}</code> does not have access.</div>
+    <p class="text-center my-5">
+      <a class="btn btn-primary btn-lg" href="../">Go to DocSearch home</a>
+      <a class="btn btn-success btn-lg" href="../login">Log in</a>
+    </p>
+    {% else %}
+    <form id="search-form">
+      <div class="row justify-content-between mb-3">
+        <div class="col-12 col-md-4">
+          <p>{{ demo['body'] }}</p>
+          <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" checked name="Followup" value="1" id="Followup">
+            <label class="form-check-label" for="Followup">Suggest follow-up questions</label>
+          </div>
+          {% for field, fieldConfig in demo.get("filters", {}).items() %}
+          <div class="row mb-3">
+            <label for="{{ field }}" class="col-sm-3 col-form-label">{{ fieldConfig['label'] }}</label>
+            <div class="col-sm-9">
+              <select class="form-select" aria-label="{{ fieldConfig['label'] }}" name="{{ field }}" id="{{ field }}">
+                {% if not fieldConfig["required"] %}<option value="">(All)</option>{% end %}
+                {% for value in docsearch.filter_values(handler.path_args[0], field) %}
+                <option>{{ value }}</option>
+                {% end %}
+              </select>
+            </div>
+          </div>
+          {% end %}
+        </div>
+        <div class="col-12 col-md-4" id="sample-questions">
+          {% import random %}
+          {% for question in random.sample(demo['questions'], 3) %}
+          <button class="btn btn-link btn-sm question d-block text-start" type="button">{{ question }}</button>
+          {% end %}
+        </div>
+        <div class="col-12 col-md-4">
+          {% for name, style_items in config['styles'].items() %}
+          <div class="row mb-1">
+            <label for="{{ name }}" class="col-sm-3 col-form-label-sm">{{ name }}</label>
+            <div class="col-sm-9">
+              <select name="{{ name }}" id="{{ name }}" class="form-select form-select-sm" aria-label="{{ name }}">
+                {% for item in style_items %}<option>{{ item }}</option>{% end %}
+              </select>
+            </div>
+          </div>
+          {% end %}
+        </div>
+      </div>
+
+      <div class="input-group mb-3">
+        <input type="hidden" name="app" value="{{ handler.path_args[0] }}">
+        <input type="hidden" name="k" value="50">
+        <input type="hidden" name="c" value="10">
+        <input type="search" name="q" id="q" class="form-control" placeholder="Ask a question" aria-label="Ask a question" autofocus required>
+        <button type="submit" class="input-group-text"><i class="bi bi-search"></i><span class="visually-hidden">Search</span></button>
+      </div>
+    </form>
+
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <label for="similarity" class="form-label visually-hidden">Similarity threshold</label>
+        <input id="similarity" type="range" class="form-range d-none" min="0" max="1" step="0.01" value="0.70" />
+        <svg id="network" width="600" height="300" class="d-block mx-auto w-100"></svg>
+        <div id="summary"></div>
+      </div>
+      <div class="col-12 col-lg-6">
+        <div id="matches"></div>
+      </div>
+    </div>
+
+    <footer class="my-5 vh-100 d-flex align-items-center justify-content-center">
+      <h1 class="display-4">Designed by <a href="https://gramener.com/" class="text-reset link-offset-3 link-underline link-underline-opacity-25">Gramener</a></h1>
+    </footer>
+
+    <div id="config" data-link="{{ demo['link'] }}" data-min-similarity="{{ demo.get('min_similarity', 0.5) }}" data-color="{{ json.dumps(demo.get('color', None)) }}" data-open-snippets="{{ demo.get('open-snippets', '') }}"></div>
+    <script type="module" src="../script.js"></script>
+    {% end %}
+  </div>
+</body>
+
+</html>

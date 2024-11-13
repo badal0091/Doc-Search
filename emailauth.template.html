@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocSearch | Login</title>
+  <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container col-md-6 col-lg-4 col-xl-3">
+    <h1 class="text-center mt-5">DocSearch</h1>
+
+    {% if handler.current_user %}
+      <p>You are logged in as <code>{{ handler.current_user.get('email', 'unknown') }}</code>.</p>
+    {% end %}
+
+    {% if error %}
+      <div class="alert alert-danger">
+        <strong>Error</strong>: {{ msg }}
+      </div>
+    {% end %}
+
+    {% if email is None and otp is None %}
+      <p>Log into this app with an <code>@gramener.com</code> or <code>@straive.com</code> email ID or an authorized email ID.</p>
+      <p>Contact <code>s.anand@gramener.com</code> for access.</p>
+
+      <a class="btn btn-outline-primary w-100 d-flex align-items-center justify-content-center" href="login-ms?next={{ handler.get_arg('next', '.') }}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-microsoft" viewBox="0 0 16 16">
+          <path d="M7.462 0H0v7.19h7.462V0zM16 0H8.538v7.19H16V0zM7.462 8.211H0V16h7.462V8.211zm8.538 0H8.538V16H16V8.211z" />
+        </svg>
+        <span class="ms-1">Log in via Microsoft</span>
+      </a>
+      <hr class="mt-5 mb-4">
+
+      <form method="POST">
+        <input type="hidden" name="_xsrf" value="{{ handler.xsrf_token }}">
+        <label for="user" class="form-label text-center">Or log in via e-mail</label>
+        <input type="email" class="form-control border-primary" name="user" id="user" value="{{ email or '' }}" autofocus>
+        <button type="submit" class="btn btn-primary my-3">Send OTP via e-mail</button>
+      </form>
+      <p class="mt-3"><a href="?user&{{ url_escape(redirect['name']) }}={{ url_escape(redirect['value']) }}">I already have the OTP</a></p>
+    {% else %}
+      {% if handler.request.method == 'POST' %}
+        <p>We sent an email to <code>{{ email }}</code> with an OTP and link to log in.</p>
+        <p>Once you receive the OTP, enter it below.</p>
+      {% end %}
+      <form>
+        <p class="row">
+          <input type="hidden" name="{{ redirect['name'] }}" value="{{ redirect['value'] }}">
+          <input type="hidden" name="user" value="">
+          <input type="hidden" name="_" value="">
+          <label for="password" class="form-label">OTP</label>
+          <input class="form-control" name="password" id="password" value="{{ otp or '' }}" autofocus autocomplete="off">
+        </p>
+        <button type="submit" class="btn btn-primary">Submit OTP</button>
+      </form>
+      <p class="mt-5"><a href="?{{ url_escape(redirect['name']) }}={{ url_escape(redirect['value']) }}">Request new OTP</a></p>
+    {% end %}
+  </div>
+</body>
+</html>

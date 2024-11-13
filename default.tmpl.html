@@ -1,0 +1,94 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DocSearch</title>
+  <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="node_modules/bootstrap-icons/font/bootstrap-icons.min.css" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
+  {% import gramex.cache %}
+  {% set config = gramex.cache.open('config.yaml', rel=True) %}
+  {% set user = handler.current_user or {} %}
+  {% set domain = (user.get('email', '') or '').lower().split('@')[-1] %}
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href=".">DocSearch</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="nav-item dropdown ms-auto" role="group" aria-label="Toggle dark mode" title="Toggle Dark Mode">
+          <button class="dark-theme-toggle btn btn-outline-light dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Toggle theme (auto)">
+            <i class="bi bi-circle-half"></i> <span class="d-lg-none ms-2">Toggle theme</span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li><button class="dropdown-item" data-bs-theme-value="light"><i class="me-2 bi bi-sun-fill"></i> Light</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="dark" class="active"><i class="me-2 bi bi-moon-stars-fill"></i> Dark</button></li>
+            <li><button class="dropdown-item" data-bs-theme-value="auto"><i class="me-2 bi bi-circle-half"></i> Auto</button></li>
+          </ul>
+        </div>
+        <a href="login?next={{ handler.xrequest_uri }}" title="{{ user.get('email', 'Log in') }}" class="btn btn-outline-light ms-2">
+          <i class="bi bi-person-circle"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 class="display-1 my-5 text-center">DocSearch</h1>
+
+    <p class="text-center display-6">Search with Gen AI. Get answers directly, with citations.</p>
+
+    <div class="demos row row-cols-1 row-cols-sm-2 row-cols-lg-3 row-cols-xl-4">
+      {% for key, demo in config['demos'].items() %}
+        {% if not 'domains' in demo or domain in demo['domains'] %}
+          <div class="col py-3">
+            <a class="demo card h-100 text-decoration-none" href="{{ key }}/">
+              <div class="card-body">
+                <h5 class="card-title">{{ demo['title'] }}</h5>
+                <p class="card-text">{{ demo['body'] }}</p>
+              </div>
+            </a>
+          </div>
+        {% end %}
+      {% end %}
+      <!-- New static card for creating a new card -->
+      <div class="col py-3">
+        <a class="demo card h-100 text-decoration-none" href="create-new-card.html">
+          <div class="card-body">
+            <h5 class="card-title">Create new Card</h5>
+            <p class="card-text">Click here to create a new card.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <hr class="my-5">
+    <div class="text-center">
+      {% if not handler.current_user %}
+        <a class="btn btn-outline-primary" href="login">Log in</a> as an authorized user to see more demos
+      {% else %}
+        You are logged in as <code>{{ user.get('email', 'None') }}</code>. <a class="btn btn-outline-primary" href="login">Change login</a>
+      {% end %}
+    </div>
+
+    <footer class="my-5 vh-100 d-flex align-items-center justify-content-center">
+      <h1 class="display-4">Designed by <a href="https://gramener.com/" class="text-reset link-offset-3 link-underline link-underline-opacity-25">Gramener</a></h1>
+    </footer>
+  </div>
+
+  <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.min.js" type="module"></script>
+  <script src="node_modules/@gramex/ui/dist/dark-theme.js" type="module"></script>
+</body>
+
+</html>
+apps-fileview.texmex_20241031.01_p0
+default.tmpl.html
+Displaying default.tmpl.html.

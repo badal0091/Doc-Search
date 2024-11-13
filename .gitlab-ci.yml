@@ -1,0 +1,21 @@
+validate:
+  image: gramener/builderrors
+  # duplicate-files: .chromadb has files like header.bin, data_level0.bin that may be identical, so skip
+  # duplicate-lines: hipreplacement/scrape.py and  videosearch/scrape.py have 60+ lines in common. Sorry, no time to fix
+  script: builderrors --skip=duplicate-files --skip=duplicate-lines
+
+deploy:
+  stage: deploy
+  script:
+    - secrets DOCSEARCH_* > .secrets.yaml
+    - deploy
+  variables:
+    SERVER: ubuntu@gramener.com
+    URL: docsearch
+    SETUP: gramex setup .
+    VERSION: py3v11
+    # DO NOT DEPLOY at 8050 - same port as LLMProxy. This is a blocking request
+    PORT: 8040
+  environment:
+    name: production
+    url: https://gramener.com/docsearch/

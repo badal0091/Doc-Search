@@ -1,0 +1,285 @@
+demos:  
+  ESGtoday:
+    client: ESG Today
+    title: ESG Today Business Wire
+    body: Summarize the latest ESG (Environmental, Social, and Governance) news, trends, and developments in business from the Business Wire section of ESG Today.
+    link: https://www.esgtoday.com/category/business-wire/
+    questions:
+      - How is Miranda Lambert's MuttNation Fund contributing to hurricane recovery efforts, and what specific initiatives have been funded?
+      - What key impact initiatives did Peloton highlight in its fourth annual ESG report, and how do these initiatives align with its sustainability goals?
+      - How is Transition Industries leveraging public-private partnerships for its Pacifico Mexinol project in Sinaloa, Mexico?
+      - What role does PUMA play in advancing circular economy practices in the textile industry?
+      - What strategies are being implemented by the coalition of six global environmental organizations to improve climate and conservation outcomes through sovereign debt conversions?
+      - How are different companies measuring and reporting progress on their sustainability and ESG (Environmental, Social, and Governance) initiatives?
+
+      - What new partnerships or collaborations are emerging to support sustainable projects, and how are they structured?
+
+      - What innovative approaches are companies taking to achieve environmental goals, such as waste reduction and renewable energy adoption?
+
+      - How are organizations and coalitions working together to tackle global environmental challenges and drive impactful conservation efforts?
+
+
+  resumesearch:
+    title: Resume Search
+    body: Search resumes based on skills and match requirements from a collection of resumes.
+    questions:
+      - "Find resumes with expertise in Python."
+      - "Which candidates have experience with data analysis?"
+      - "Search for resumes mentioning machine learning skills."
+    link: https://www.resumesearch.com/content/🔑
+    color:
+      field: key_in_chroma_db # Field to color by, e.g. decision
+      values: { Accept: green, Reject: red } # If decision=Accept, color it green, etc.
+      relevanceOpacity: true # If true, lower relevance values are transparent
+
+
+  epr: # The key MUST be the same as the directory name
+    title: EPR Genie
+    body: Answer questions based on the EPR Legislative Bills passed by US States
+    questions: # Pick 3+ good questions
+      # - What EPR mandates are imposed on producers in the State of New Jersey?
+      - What penalties are applicable in New Jersey for non-compliance with the EPR regulation?
+      - How will producers be incentivized to reduce plastic in their packaging in the state of Colorado?
+      - What packaging materials are considered covered materials as per the EPR regulation in Colorado?
+      - Does Washington determine penalty for EPR non-compliance based on amount of post-consumer recycled plastic content?
+    link: 🔑
+    # How to color the nodes in the graph. If not specified, nodes are colored by relevance
+    color:
+      field: key_in_chroma_db # Field to color by, e.g. decision
+      values: { Accept: green, Reject: red } # If decision=Accept, color it green, etc.
+      relevanceOpacity: true # If true, lower relevance values are transparent
+
+  insiderintelligence:
+    client: eMarketer
+    title: Insider Intelligence
+    body: Search over 7,000 articles from the Insider Intelligence knowledge base to find the most relevant articles and answer.
+    link: https://www.insiderintelligence.com/content/🔑
+    questions:
+      - How does Comcast compete with Disney?
+      - What is Amazon's business model?
+      - How was Netflix's financial performance?
+
+  creditcardcomplaints:
+    client: PNC, Visa
+    title: Credit Card Complaints
+    body: Search over 4,000 consumer complaints about credit cards in Q1 2024 to understand the most common issues and resolutions.
+    link: https://www.consumerfinance.gov/data-research/consumer-complaints/search/detail/🔑
+    questions:
+      - What are common complaints about Bank of America?
+      - How does late payment fees affect consumers?
+      - Which banks get complaints about card cancellations?
+
+  biomoleculepapers:
+    client: Wiley, Elsevier, Springer Nature, CAS
+    title: Biomolecule Papers
+    body: Answer questions based on each and every one of the 5,000 biomolecule paper abstracts on Arxiv.
+    link: https://arxiv.org/abs/🔑
+    questions:
+      - How can we efficiently compute folded protein structures?
+      - How can we use neural networks in molecular design?
+      - How are biomaterials engineered for targeted drug delivery?
+
+  hipreplacement:
+    client: Gramener
+    title: Hip Surgery Videos
+    body: Search videos with plain text. Videos were segmented at keyframes and described along with the objects.
+    link: 🔑.mp4
+    min_similarity: 0.1
+    color:
+      field: h1
+    open-snippets: true
+    questions:
+      - What are steps in a posterior approach total hip arthroplasty?
+      - What's the role of the Hohmann retractor?
+      - What are potential complications in posterior capsulotomy?
+      - How can surgical instruments minimize tissue damage?
+      - What is the recovery time and physical therapy required after hip replacement?
+      - What equipment and personnel are required for total hip arthroplasty?
+
+  videosearch:
+    client: TMB
+    title: Video Search
+    body: Search videos with plain text. Videos were segmented at keyframes and described along with the objects.
+    link: 🔑.mp4
+    min_similarity: 0.1
+    color:
+      field: h1
+      # values: { Accept: green, Reject: red }
+      # relevanceOpacity: true
+    open-snippets: true
+    questions:
+      - Locate animals of any kind
+      - Where can we find beautiful scenery?
+      - Look for complex machinery
+
+  publichealth:
+    client: Straive
+    title: CDC Public Health
+    body: Search and interact with over 10,000 public health reports and papers from the CDC.
+    link: 🔑
+    questions:
+      - What strategies were implemented in 2013 to monitor and reduce childhood lead exposure in the U.S., according to the CDC surveillance report?
+      - What are the main goals of the CDC's Injury Control and Risk Survey (ICARIS-2)?
+      - What were the major findings of the 2013 surveillance of childhood lead poisoning in the U.S.?
+      - How has public health has been used to improve the health of populations?
+      - What are the major challenges to public health?
+      - What are ways to address the challenges facing public health?
+      - What is the role of different stakeholders in the field of public health?
+      - What are some prominent events in the history of public health?
+
+  publisherguidelines:
+    client: Springer Nature
+    title: Publisher Guidelines
+    body: Answer questions based on a research journal's publishing guidelines.
+    link: https://link.springer.com/journal/11356/submission-guidelines
+    open-snippets: true
+    questions:
+      - How to avoid pitfalls in selecting reviewers?
+      - How to document permission for previously published figures?
+      - Best practices for formatting references?
+      - How to ensure figures meet resolution and accessibility standards?
+      - Strategies for writing a concise abstract?
+      - How to choose the right type of paper for research?
+      - Key considerations for selecting keywords?
+      - How can non-native English authors improve manuscript quality?
+      - How to effectively use supplementary materials?
+      - How to streamline the manuscript submission process?
+
+  vara:
+    client: Dubai Government
+    title: VARA
+    body: Answer questions based the Dubai Government's VARA (Virtual Assets Regulatory Authority) policy documents
+    link: https://rulebooks.vara.ae/sites/default/files/en_net_file_store/🔑
+    questions:
+      - What are the principles and goals of VARA in 2023?
+      - What kinds of licenses does VARA issue?
+      - List policies related to VA investments
+
+  wef:
+    client: Straive
+    title: WEF Publications
+    body: Explore all World Economic Forum's Finance & ESG publications from July to August 2024
+    link: https://www3.weforum.org/docs/🔑.pdf
+    min_similarity: 0.3
+    filters:
+      key: { label: Document, required: false }
+    questions:
+      - What are potential applications of quantum technologies in solving global sustainability?
+      - How do clean hydrogen strategies and infrastructure differ across Latin American countries?
+      - How can we attract private sector investment in natural climate solutions in India?
+      - How can the public and private sectors collaborate on a clean hydrogen economy?
+
+  learningmatepolicies:
+    client: Wiley, Elsevier, Springer Nature, CAS
+    title: LearningMate Policies
+    body: Answer questions from LearningMate's HR, IT, Security, and Flexible Workplace policies.
+    link: https://learningmate.com/
+    min_similarity: 0.3
+    questions:
+      - What is the maternity leave policy?
+      - What are the terms of the work from home policy?
+      - Who approves travel expense reimbursement?
+    persona:
+      HR Team: >
+        You're answering the HR team who is an expert in these policies. Answer user query using ONLY the below context.
+        Respond in markdown. Use multiple VERY SHORT paragraphs. Highlight key phrases in **bold**.
+        If no relevant information exists, say so, then summarize context.
+      Employee: >
+        You're answering an employee who does not understand HR policies. Answer user query using ONLY the below context.
+        Respond in markdown. Use multiple VERY SHORT paragraphs. Highlight key phrases in **bold**.
+        Answer in VERY simple language. Use ACTIVE VOICE. Make it interesting and fun! Use emojis if apt.
+        If no relevant information exists, say so, then summarize context.
+
+  authorcontracts:
+    client: Wiley
+    title: Author Contracts
+    body: Answer questions from Wiley's contracts with authors. Explore risk, terms, and rights.
+    link: https://wiley.com/
+    domains: [gramener.com, straive.com, learningmate.com, wiley.com]
+    min_similarity: 0.3
+    filters:
+      contract: { label: Contract, required: true }
+    questions:
+      - What rights do the Editors assign to the Publisher?
+      - What happens if the Editors do not deliver complete and satisfactory materials by the Due Date?
+      - Who retains the intellectual property rights for the design and typography of the Work?
+      - What happens if the Editors do not deliver complete and satisfactory materials by the Due Date?
+      - Are there any conditions under which the Publisher can terminate the Agreement?
+      - What royalties are the Editors entitled to for sales of the original edition in print?
+      - Can the Editors publish any other work based on the Work without the Publisher's consent?
+      - How does the Publisher handle the royalties if the Work is sold at a discount of 60% or more?
+      - What responsibilities do the Editors have regarding the Contributor Agreements?
+      - What must the Editors do if the Publisher requests changes to the delivered materials?
+      - Who is responsible for obtaining permissions for copyrighted material used in the Work?
+      - What is the procedure if an Editor dies or becomes incapacitated?
+      - How are disputes between the Editors and the Publisher to be resolved?
+      - Can the Publisher make changes to the Work without the Editors' approval?
+      - Are the royalties affected if the Work is sold or licensed to Publisher's affiliates?
+      - What are the consequences if the Editors do not reply to copyediting queries?
+    persona:
+      Publisher: >
+        You're answering an expert publisher evaluating author contracts. Answer user query using ONLY the below context.
+        Respond in markdown. Use multiple VERY SHORT paragraphs. Highlight key phrases in **bold**.
+        If no relevant information exists, say so, then summarize context.
+      Author: >
+        You're answering an author who doesn't understand contracts. Answer user query using ONLY the below context.
+        Respond in markdown. Use multiple VERY SHORT paragraphs. Highlight key phrases in **bold**.
+        Answer in VERY simple language. Use ACTIVE VOICE. Make it interesting and fun!
+        If no relevant information exists, say so, then summarize context.
+
+  paperrejections:
+    client: Springer Nature
+    title: ESPR Paper Rejections
+    body: Explore accepted and rejected manuscripts submitted to the Environmental Science and Pollution Research journal
+    link: https://www.google.com/search?q=🔑
+    domains: [gramener.com, straive.com, learningmate.com]
+    min_similarity: 0.3
+    filters:
+      decision: { label: Decision, required: false }
+    color:
+      field: decision
+      values: { Accept: green, Reject: red }
+      relevanceOpacity: true
+    questions:
+      - What innovative techniques are used for environmental remediation?
+      - What global environmental challenges do studies tackle and offer scalable solutions?
+      - Are there studies on the water scarcity in Saudi Arabia?
+
+styles:
+  Tone:
+    Professional: Use formal language, no contractions, no slang, no emojis
+    Casual: Use relaxed, conversational tone. Use contractions, very simple language. No slang. Use emojis
+    Enthusiastic: Use positive language, exclamations!
+    Informational: Always provide numbers, facts, data, and insights
+    Funny: Always add jokes or puns
+    Succinct: VERY SHORT. Concise. Entity-dense. No fluff. Phrases, not sentences.
+  Format:
+    Summary: Write a single paragraph. Highlight only a few key words in **bold**.
+    Report: Write multiple paragraphs. Begin each para with a **bold sentence** that summarizes the para.
+    Bullet Points: Summarize crisply like PowerPoint
+    LinkedIn Post: Excite the audience! Use simple language, hashtags
+    Email: Draft a professional email to answer the question
+  Language:
+    English: Write in American English.
+    Chinese: Write in Mandarin Chinese.
+    Hindi: Write in Hindi.
+    Korean: Write in Korean.
+    Spanish: Write in Spanish.
+
+prompts:
+  answer: |
+    Answer user query using ONLY the below context. Respond in Markdown.
+    Cite the DOC_ID where possible like [[1](#1)], [[3](#3)], etc.
+  followup: |
+    ALWAYS suggest 3 follow-up questions.
+    DIRECTLY RELATED to the user query.
+    ANSWERABLE from this context.
+    CONCISE and simple.
+    ALWAYS LINKED to #suggestion.
+    Example:
+
+    **Follow-up questions**:
+
+    - [Question 1](#suggestion)
+    - [Question 2](#suggestion)
+    - [Question 3](#suggestion)
